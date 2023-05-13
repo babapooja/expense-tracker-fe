@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import InputField from '../components/InputField';
 import Button from '../components/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../assets/images/logo.png';
 import UseAnimations from 'react-useanimations';
 import infinity from 'react-useanimations/lib/infinity';
 
 const Register = () => {
+    const navigate = useNavigate();
     const [formDetails, setFormDetails] = useState({ email: '', password: '', text: '' });
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -29,23 +30,26 @@ const Register = () => {
 
     const login = (event) => {
         setLoading(true);
+        setErrorMessage(null);
         event.preventDefault();
+        // console.log(event.target.email.value)
         // create API call to execute login
         options.body = formDetails;
-        fetch(BASE_URL + '/sign-up', options)
-            .then(response => {
-                response.json();
-                setLoading(false);
-            })
-            .then(response => {
-                setLoading(false);
-                console.log(response);
-            })
-            .catch(err => {
-                setLoading(false);
-                setErrorMessage('Something went wrong')
-                console.log(err)
-            });
+        // fetch(BASE_URL + '/sign-up', options)
+        //     .then(response => {
+        //         response.json();
+        //         setLoading(false);
+        //     })
+        //     .then(response => {
+        //         setLoading(false);
+        //         console.log(response);
+        //     })
+        //     .catch(err => {
+        //         setLoading(false);
+        //         setErrorMessage('Something went wrong')
+        //         console.log(err)
+        //     });
+        navigate("/login")
     }
 
 
@@ -60,12 +64,14 @@ const Register = () => {
                 <InputField label="Full Name"
                     placeholder="Enter full name"
                     type="text"
+                    name="fullName"
                     value={formDetails.text}
                     onChange={handleChange}
                 />
                 <InputField label="Email"
                     placeholder="Enter email address"
                     type="email"
+                    name="email"
                     value={formDetails.email}
                     onChange={handleChange}
                 />
@@ -73,6 +79,7 @@ const Register = () => {
                     placeholder="Enter your password"
                     value={formDetails.password}
                     type="password"
+                    name="password"
                     onChange={handleChange}
                 />
                 <Button text="SignIn" />

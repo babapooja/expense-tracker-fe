@@ -5,18 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../assets/images/logo.png';
 import UseAnimations from 'react-useanimations';
 import infinity from 'react-useanimations/lib/infinity';
+import { httpPost } from '../services/httpservices';
 
 const Register = () => {
     const navigate = useNavigate();
     const [formDetails, setFormDetails] = useState({ email: '', password: '', text: '' });
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
-    const BASE_URL = 'http://localhost:8080/api';
-
-    const options = {
-        method: 'POST',
-        // url: BASE_URL + '/sign-up'
-    }
 
     const handleChange = (e) => {
         setErrorMessage(null);
@@ -32,24 +27,17 @@ const Register = () => {
         setLoading(true);
         setErrorMessage(null);
         event.preventDefault();
-        // console.log(event.target.email.value)
-        // create API call to execute login
-        options.body = formDetails;
-        // fetch(BASE_URL + '/sign-up', options)
-        //     .then(response => {
-        //         response.json();
-        //         setLoading(false);
-        //     })
-        //     .then(response => {
-        //         setLoading(false);
-        //         console.log(response);
-        //     })
-        //     .catch(err => {
-        //         setLoading(false);
-        //         setErrorMessage('Something went wrong')
-        //         console.log(err)
-        //     });
-        navigate("/login")
+        // api call to register then redirect to login page
+        httpPost('/sign-up', JSON.stringify(formDetails)).then((data) => {
+            setLoading(false);
+            console.log(data);
+            navigate("/login");
+        })
+            .catch(err => {
+                setLoading(false);
+                setErrorMessage("Something went wrong");
+                console.log(err);
+            });
     }
 
 

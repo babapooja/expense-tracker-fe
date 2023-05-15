@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputField from '../components/InputField';
 import Button from '../components/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../assets/images/logo.png';
 import UseAnimations from 'react-useanimations';
 import infinity from 'react-useanimations/lib/infinity';
+import { httpPost } from '../services/httpservices';
+import { LSGet, LSSet } from '../services/localStorage';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [formDetails, setFormDetails] = useState({ email: '', password: '' });
+    const [formDetails, setFormDetails] = useState({ email: 'sdf@g.c', password: '' });
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
-    const BASE_URL = 'http://localhost:8080/api';
 
-    const options = {
-        method: 'POST',
-        url: BASE_URL + '/sign-in'
-    }
+
+    useEffect(() => {
+        if (LSGet('user')) {
+            setFormDetails({ ...formDetails, email: LSGet('user') });
+        }
+    }, []);
 
     const handleChange = (e) => {
         setErrorMessage(null);
@@ -32,22 +35,18 @@ const Login = () => {
         setLoading(true);
         event.preventDefault();
         // create API call to execute login
-        options.body = formDetails;
-        // fetch(BASE_URL + '/login', options)
-        //     .then(response => {
-        //         response.json();
-        //         setLoading(false);
-        //     })
-        //     .then(response => {
-        //         setLoading(false);
-        //         console.log(response);
-        //     })
-        //     .catch(err => {
-        //         setLoading(false);
-        //         setErrorMessage('Something went wrong')
-        //         console.log(err)
-        //     });
-        navigate('/home');
+        // post('/sign-in', JSON.stringify(formDetails)).then((response) => {
+        //     console.log(response.json());
+        //     setLoading(false);
+        //     navigate('/home');
+        // }).catch(err => {
+        //     setLoading(false);
+        //     setErrorMessage('Something went wrong')
+        //     console.log(err);
+        // });
+        LSSet('user', formDetails.email);
+        navigate('/');
+
     }
 
 

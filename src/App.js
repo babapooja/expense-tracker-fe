@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 
+
 function App() {
   const ProtectedRoute = ({ children }) => {
     const currentUser = useContext(AuthContext);
@@ -17,7 +18,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* <div className="h-screen flex justify-center items-center"> */}
+      <div className="min-h-screen h-100 flex justify-center items-center min-w-screen bg-zinc-100">
       <Routes>
         <Route
           path="/"
@@ -31,7 +32,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
       </Routes>
-      {/* </div> */}
+      </div>
     </BrowserRouter>
   );
 }
